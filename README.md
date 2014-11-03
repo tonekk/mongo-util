@@ -16,6 +16,9 @@ No. Some mongo commands just don't have authentication, so I found it was the ea
 ## Synopsis
 
 ```ruby
+
+require 'mongo/util'
+
 # Create mongo util instance, set database to fetch from and database to copy to
 # as well as dump folder
 mongo = Mongo::Util.new({ host: 'foo.mongohosting.com', port: 31337, db: 'foo' },
@@ -58,6 +61,8 @@ The snippet above is replacing the contents of all collections from `localhost:2
 
 Install as you would install any other gem.
 [bundler](http://bundler.io/) is your friend!
+
+When you're using Rails and you want to use this gem for a script to get fresh production data, just use `bundle exec yourscript.rb`, where *yourscript.rb* contains something like above.
 
 
 ## Contributing
