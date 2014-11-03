@@ -74,7 +74,11 @@ module Mongo
         raise 'Cannot fetch collections: needs @to[:host], @to[:port], @to[:db]'
       end
 
-      `mongo #{@to[:db]} --host #{@to[:host]} --port #{@to[:port]} --quiet --eval 'db.getCollectionNames()'`.rstrip.split(',')
+      cmd = "mongo #{@to[:db]} --host #{@to[:host]} --port #{@to[:port]} --quiet --eval 'db.getCollectionNames()'"
+      # Append auth, if neccessary
+      cmd += Mongo::Util.authentication(@to)
+
+      `#{cmd}`.rstrip.split(',')
     end
 
     # Deletes @dump_dir
