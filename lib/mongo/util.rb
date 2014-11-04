@@ -41,7 +41,8 @@ module Mongo
     end
 
     # Restore contents of @dump_dr to @to{database}
-    def restore
+    # NOTE: Changes @to{database}
+    def restore!
       unless @to[:host] && @to[:port] && @to[:db] && @from[:db]
         raise 'Cannot restore: needs @to[:host], @to[:port], @to[:db] & @from[:db]'
       end
@@ -54,8 +55,9 @@ module Mongo
     end
 
     # Removes all items / items which match options[:query]
-    # from collection
-    def remove(collection, options={})
+    # from collection of @from{database}
+    # NOTE: Changes @from{database}
+    def remove!(collection, options={})
       unless @to[:host] && @to[:port] && @to[:db]
         raise "Cannot remove #{collection}: needs @to[:host], @to[:port], @to[:db]"
       end
@@ -84,7 +86,7 @@ module Mongo
     end
 
     # Deletes @dump_dir
-    def clean
+    def clean!
       self.exec("rm -rf #{@dump_dir}")
     end
 
