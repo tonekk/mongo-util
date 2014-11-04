@@ -35,21 +35,20 @@ mongo.collections.each do |collection|
   if collection == 'some.collection'
 
     # Add queries here as you like
-    mongo.remove(collection, query: { something: false })
+    mongo.remove!(collection, query: { something: false })
     mongo.dump(collection: collection, query: { something: false })
-    mongo.restore
 
   else
 
     # Just copy
-    mongo.remove(collection)
+    mongo.remove!(collection)
     mongo.dump(collection: collection)
-    mongo.restore
 
   end
 
-  # Clean up dump folder
-  mongo.clean                                                                                                   
+  # Restore & clean up dump folder
+  mongo.restore!
+  mongo.clean!                                                                                                   
 end
 
 ```
