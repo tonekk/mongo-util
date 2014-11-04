@@ -37,7 +37,7 @@ module Mongo
       # Append auth, if neccessary
       cmd += Mongo::Util.authentication(@from)
 
-      system(cmd)
+      self.exec(cmd)
     end
 
     # Restore contents of @dump_dr to @to{database}
@@ -50,7 +50,7 @@ module Mongo
       # Append auth, if neccessary
       cmd += Mongo::Util.authentication(@to)
 
-      system(cmd)
+      self.exec(cmd)
     end
 
     # Removes all items / items which match options[:query]
@@ -65,7 +65,7 @@ module Mongo
       cmd += Mongo::Util.authentication(@to)
       cmd += " --eval 'db.#{collection}.remove(#{options[:query] ? options[:query].to_json : ""});'"
 
-      system(cmd)
+      self.exec(cmd)
     end
 
     # Returns Array of all collection-names of @to{database}
@@ -78,12 +78,20 @@ module Mongo
       # Append auth, if neccessary
       cmd += Mongo::Util.authentication(@to)
 
-      `#{cmd}`.rstrip.split(',')
+      collections = self.exec(cmd, return_output: true).rstrip.split(',')
+      # If we have a '{' in the output, Mongo has thrown an error
+      collections.each {|col| raise "Error while fetching collections: '#{collections.join()}'" if col.include?('{')}
     end
 
     # Deletes @dump_dir
     def clean
-      system("rm -rf #{@dump_dir}")
+      self.exec("rm -rf #{@dump_dir}")
+    end
+
+    def exec(cmd, options={})
+      # Print commands for debugging
+      print "Executing: '#{cmd}'\n"
+      options[:return_output] ? `#{cmd}` : system(cmd)
     end
 
     # Enable auth if we set db_config contains user & password
