@@ -90,7 +90,9 @@ module Mongo
 
     def exec(cmd, options={})
       # Print commands for debugging
-      print "Executing: '#{cmd}'\n"
+      print "\n=======================================\n"
+      print "| Executing: '#{cmd}'\n"
+      print "=======================================\n\n"
       options[:return_output] ? `#{cmd}` : system(cmd)
     end
 
