@@ -70,15 +70,15 @@ module Mongo
       self.exec(cmd)
     end
 
-    # Returns Array of all collection-names of @to{database}
+    # Returns Array of all collection-names of @from{database}
     def collections
-      unless @to[:host] && @to[:port] && @to[:db]
+      unless @from[:host] && @from[:port] && @from[:db]
         raise 'Cannot fetch collections: needs @to[:host], @to[:port], @to[:db]'
       end
 
-      cmd = "mongo #{@to[:db]} --host #{@to[:host]} --port #{@to[:port]} --quiet --eval 'db.getCollectionNames()'"
+      cmd = "mongo #{@from[:db]} --host #{@from[:host]} --port #{@from[:port]} --quiet --eval 'db.getCollectionNames()'"
       # Append auth, if neccessary
-      cmd += Mongo::Util.authentication(@to)
+      cmd += Mongo::Util.authentication(@from)
 
       collections = self.exec(cmd, return_output: true).rstrip.split(',')
       # If we have a '{' in the output, Mongo has thrown an error
