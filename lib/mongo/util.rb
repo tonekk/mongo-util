@@ -65,7 +65,7 @@ module Mongo
       cmd = "mongo #{@to[:db]} --host #{@to[:host]} --port #{@to[:port]}"
       # Append auth, if neccessary
       cmd += Mongo::Util.authentication(@to)
-      cmd += " --eval 'db.#{collection}.remove(#{options[:query] ? options[:query].to_json : ""});'"
+      cmd += " --eval 'db.#{collection}.remove(#{options[:query] ? options[:query].to_json : "{}"});'"
 
       self.exec(cmd)
     end
